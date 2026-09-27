@@ -1,0 +1,179 @@
+LISTA 01 — EXERCÍCIOS COM REDIS
+
+EXERCÍCIO 01 — Strings
+Objetivo:
+Criar a chave sistema:nome com o valor "DataPlatform" e recuperar o valor salvo.
+
+Comandos:
+SET sistema:nome "DataPlatform"
+GET sistema:nome
+
+
+EXERCÍCIO 02 — Strings
+Objetivo:
+Gravar três variáveis de ambiente no mesmo comando e depois buscar apenas env:db e env:cache.
+
+Comandos:
+MSET env:db "postgres" env:cache "redis" env:queue "rabbitmq"
+MGET env:db env:cache
+
+
+EXERCÍCIO 03 — Strings
+Objetivo:
+Criar um token de sessão que expire automaticamente em 30 segundos e verificar o tempo restante.
+
+Comandos:
+SETEX sessao:usuario:101 30 "xyz123"
+TTL sessao:usuario:101
+
+
+EXERCÍCIO 04 — Strings
+Objetivo:
+Criar um contador de acessos para a página principal, incrementar 1, depois mais 5 e por fim decrementar 2.
+
+Comandos:
+INCR pageviews:home
+INCRBY pageviews:home 5
+DECRBY pageviews:home 2
+
+
+EXERCÍCIO 05 — Hashes
+Objetivo:
+Criar um perfil de usuário usuario:201 com nome, email e nível de acesso.
+
+Comando:
+HSET usuario:201 nome "Carlos" email "carlos@email.com" nivel "admin"
+
+
+EXERCÍCIO 06 — Hashes
+Objetivo:
+Recuperar apenas o email do usuario:201 e depois todos os campos e valores do usuário.
+
+Comandos:
+HGET usuario:201 email
+HGETALL usuario:201
+
+
+EXERCÍCIO 07 — Hashes
+Objetivo:
+Incrementar o campo tentativas_login em 1 e listar os nomes de todos os campos do hash.
+
+Comandos:
+HINCRBY usuario:201 tentativas_login 1
+HKEYS usuario:201
+
+
+EXERCÍCIO 08 — Lists
+Objetivo:
+Criar uma fila chamada fila:email e adicionar três itens ao final da fila.
+
+Comando:
+RPUSH fila:email "email_1" "email_2" "email_3"
+
+
+EXERCÍCIO 09 — Lists
+Objetivo:
+Remover e retornar o primeiro elemento da fila fila:email.
+
+Comando:
+LPOP fila:email
+
+
+EXERCÍCIO 10 — Lists
+Objetivo:
+Listar todos os elementos restantes na fila fila:email sem removê-los.
+
+Comando:
+LRANGE fila:email 0 -1
+
+
+EXERCÍCIO 11 — Sets
+Objetivo:
+Criar o conjunto tags:post:1 com as tags "dados", "redis", "nosql" e novamente "redis", verificando depois quantos elementos existem.
+
+Comandos:
+SADD tags:post:1 "dados" "redis" "nosql" "redis"
+SCARD tags:post:1
+
+
+EXERCÍCIO 12 — Sets
+Objetivo:
+Criar o conjunto tags:post:2 e encontrar as tags que aparecem nos dois conjuntos.
+
+Comandos:
+SADD tags:post:2 "redis" "python" "backend"
+SINTER tags:post:1 tags:post:2
+
+
+EXERCÍCIO 13 — Sets
+Objetivo:
+Verificar se a tag "python" pertence ao conjunto tags:post:1.
+
+Comando:
+SISMEMBER tags:post:1 "python"
+
+
+EXERCÍCIO 14 — Sorted Sets
+Objetivo:
+Criar um leaderboard chamado placar:game com as pontuações de alice, bob e carol.
+
+Comando:
+ZADD placar:game 1500 "alice" 2200 "bob" 1800 "carol"
+
+
+EXERCÍCIO 15 — Sorted Sets
+Objetivo:
+Listar o ranking completo em ordem decrescente, mostrando também os scores.
+
+Comando:
+ZREVRANGE placar:game 0 -1 WITHSCORES
+
+
+EXERCÍCIO 16 — Sorted Sets
+Objetivo:
+Aumentar a pontuação de alice em 800 pontos e verificar sua nova posição no ranking.
+
+Comandos:
+ZINCRBY placar:game 800 "alice"
+ZREVRANK placar:game "alice"
+
+
+EXERCÍCIO 17 — Pub/Sub
+Objetivo:
+Inscrever um terminal no canal notificacoes e publicar uma mensagem a partir de outro terminal.
+
+Terminal 1:
+SUBSCRIBE notificacoes
+
+Terminal 2:
+PUBLISH notificacoes "Novo relatorio disponivel"
+
+
+EXERCÍCIO 18 — Transações
+Objetivo:
+Transferir R$ 50 da conta:A para a conta:B de forma atômica.
+
+Comandos:
+MULTI
+DECRBY conta:A 50
+INCRBY conta:B 50
+EXEC
+
+
+EXERCÍCIO 19 — Gerenciamento de Chaves
+Objetivo:
+Verificar se a chave sistema:nome existe, renomeá-la para sistema:app e depois removê-la.
+
+Comandos:
+EXISTS sistema:nome
+RENAME sistema:nome sistema:app
+DEL sistema:app
+
+
+EXERCÍCIO 20 — Inspeção do Servidor
+Objetivo:
+Visualizar informações de memória do servidor Redis e limpar os dados do banco atual.
+
+Comandos:
+INFO memory
+FLUSHDB
